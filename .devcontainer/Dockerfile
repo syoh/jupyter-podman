@@ -1,0 +1,1 @@
+FROM docker.io/jupyter/scipy-notebook:latest

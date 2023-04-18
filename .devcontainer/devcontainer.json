@@ -1,0 +1,16 @@
+{
+    "name": "Jupyter",
+    "build": {
+        "dockerfile": "Dockerfile",
+        "context": ".."
+    },
+    "remoteUser": "jovyan",
+
+    "workspaceMount": "source=${localWorkspaceFolder},target=/home/jovyan/work,type=bind,Z",
+    "workspaceFolder": "/home/jovyan/work",
+
+    "runArgs": ["--userns=keep-id"],
+    "containerUser": "jovyan",
+
+    "postStartCommand": "nohup bash -c 'start-notebook.sh > /dev/null 2>&1 &'"
+}
