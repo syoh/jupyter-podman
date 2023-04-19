@@ -27,54 +27,54 @@ RUN apt update -qq && \
     apt update -qq && \
     apt upgrade -y && \
     apt install -y \
-        software-properties-common \
-        lsof \
-        less \
-        libapparmor1 \
-        libtiff5-dev \
-        libfftw3-dev \
-        libcairo2-dev \
-        libx11-dev \
-        x11-utils \
-        psmisc \
-        libclang-dev \
-        gfortran \
-        libv8-dev \
-        libssh2-1-dev \
-        git \
-        git-lfs \
-        curl \
-        libuser \
-        libuser1-dev \
-        libpq-dev \
-        rrdtool \  
-        build-essential \
-        libxml2-dev \
-        libcurl4-openssl-dev \
-        libssl-dev \
-        build-essential \
-        cmake \
-        libnlopt-dev \
-        libboost-all-dev \
-        wget \
-        lmodern
+        libssl-dev
+        # software-properties-common \
+        # lsof \
+        # less \
+        # libapparmor1 \
+        # libtiff5-dev \
+        # libfftw3-dev \
+        # libcairo2-dev \
+        # libx11-dev \
+        # x11-utils \
+        # psmisc \
+        # libclang-dev \
+        # gfortran \
+        # libv8-dev \
+        # libssh2-1-dev \
+        # git \
+        # git-lfs \
+        # curl \
+        # libuser \
+        # libuser1-dev \
+        # libpq-dev \
+        # rrdtool \  
+        # build-essential \
+        # libxml2-dev \
+        # libcurl4-openssl-dev \
+        # build-essential \
+        # cmake \
+        # libnlopt-dev \
+        # libboost-all-dev \
+        # wget \
+        # lmodern
         
 ENV R_STUDIO_VERSION 2022.12.0-353
 
 ## Install rstudio from source package
-RUN wget https://download1.rstudio.org/electron/jammy/amd64/rstudio-${R_STUDIO_VERSION}-amd64.deb && \
-    wget https://download2.rstudio.org/server/jammy/amd64/rstudio-server-${R_STUDIO_VERSION}-amd64.deb && \
-    apt install ./rstudio*.deb -yq && apt-get clean && rm -f ./rstudio*.deb && \
-    apt-get clean 
+RUN wget -q https://download1.rstudio.org/electron/jammy/amd64/rstudio-${R_STUDIO_VERSION}-amd64.deb && \
+    wget -q https://download2.rstudio.org/server/jammy/amd64/rstudio-server-${R_STUDIO_VERSION}-amd64.deb && \
+    apt install ./rstudio*.deb -yq && rm -f ./rstudio*.deb && \
+    apt-get clean && \
+    chmod 777 /var/run/rstudio-server && \
+    chmod +t /var/run/rstudio-server
 
-RUN chmod 777 /var/run/rstudio-server && chmod +t /var/run/rstudio-server
-
-RUN R -e "dotR <- file.path(Sys.getenv('HOME'), '.R'); if(!file.exists(dotR)){ dir.create(dotR) }; Makevars <- file.path(dotR, 'Makevars'); if (!file.exists(Makevars)){  file.create(Makevars) }; cat('\nCXX14FLAGS=-O3 -fPIC -Wno-unused-variable -Wno-unused-function', 'CXX14 = g++ -std=c++1y -fPIC', 'CXX = g++', 'CXX11 = g++', file = Makevars, sep = '\n', append = TRUE)"
+# RUN R -e "dotR <- file.path(Sys.getenv('HOME'), '.R'); if(!file.exists(dotR)){ dir.create(dotR) }; Makevars <- file.path(dotR, 'Makevars'); if (!file.exists(Makevars)){  file.create(Makevars) }; cat('\nCXX14FLAGS=-O3 -fPIC -Wno-unused-variable -Wno-unused-function', 'CXX14 = g++ -std=c++1y -fPIC', 'CXX = g++', 'CXX11 = g++', file = Makevars, sep = '\n', append = TRUE)"
 
 RUN pip install nbgitpuller && \
     jupyter serverextension enable --py nbgitpuller --sys-prefix 
 
-RUN mamba install -y -c conda-forge libwebp
+# RUN mamba install -y -c conda-forge libwebp
     
 RUN mamba install -y -c conda-forge --freeze-installed jupyter-server-proxy jupyter-rsession-proxy && \
     mamba clean --all
@@ -89,6 +89,6 @@ RUN echo "echo \"Jupyter server token: \$(jupyter server list 2>&1 | grep -oP '(
     echo "sh \${HOME}/.get-jupyter-url.sh" >> ${HOME}/.bashrc
 
 ### R development
-RUN pip install radian && \
-    R -q -e 'install.packages(c("markdown", "languageserver", "httpgd"), repos="cloud.r-project.org")' &&\
-    R -q -e 'remotes::install_github("ManuelHentschel/vscDebugger")'
+# RUN pip install radian && \
+#     R -q -e 'install.packages(c("markdown", "languageserver", "httpgd"), repos="cloud.r-project.org")' &&\
+#     R -q -e 'remotes::install_github("ManuelHentschel/vscDebugger")'

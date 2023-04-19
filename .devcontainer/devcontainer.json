@@ -12,8 +12,8 @@
     "runArgs": ["--userns=keep-id"],
     "containerUser": "jovyan",
 
-    "initializeCommand": ["podman", "build", "--format", "docker", "-f", ".devcontainer/Dockerfile", "."],
-    "postStartCommand": "nohup bash -c 'start-notebook.sh &' > /dev/null 2>&1",
+	"forwardPorts": [8888],
+	"overrideCommand": false,
 
     "customizations": {
 
