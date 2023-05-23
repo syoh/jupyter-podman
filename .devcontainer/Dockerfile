@@ -1,7 +1,7 @@
 # R + Python + Julia kernels
-FROM docker.io/jupyter/datascience-notebook:x86_64-2023-03-06
+# FROM docker.io/jupyter/datascience-notebook:x86_64-2023-03-06
 # FROM jupyter/scipy-notebook:x86_64-2023-03-06
-# FROM jupyter/r-notebook:x86_64-2023-03-06
+FROM docker.io/jupyter/r-notebook:x86_64-2023-03-06
 
 USER root
 
@@ -69,6 +69,4 @@ RUN echo "echo \"Jupyter server token: \$(jupyter server list 2>&1 | grep -oP '(
     echo "sh \${HOME}/.get-jupyter-url.sh" >> ${HOME}/.bashrc
 
 ### R development
-RUN pip install radian && \
-    R -q -e 'install.packages(c("markdown", "languageserver", "httpgd"), repos="cloud.r-project.org")' &&\
-    R -q -e 'remotes::install_github("ManuelHentschel/vscDebugger")'
+RUN R -q -e 'install.packages(c("markdown", "languageserver"), repos="cloud.r-project.org")'
