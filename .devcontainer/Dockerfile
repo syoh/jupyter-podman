@@ -70,3 +70,10 @@ RUN echo "echo \"Jupyter server token: \$(jupyter server list 2>&1 | grep -oP '(
 
 ### R development
 RUN R -q -e 'install.packages(c("markdown", "languageserver"), repos="cloud.r-project.org")'
+
+USER root
+
+RUN apt update -qq && \
+    apt install -y numactl
+
+USER ${NB_USER}
